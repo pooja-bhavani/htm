@@ -1,142 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Repo Health · pooja-bhavani</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,400&family=DM+Sans:wght@300;400;500&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-  }
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 
-  body {
-    background: linear-gradient(135deg, #020617, #0f172a, #111827);
-    color: #f8fafc;
-    padding: 40px;
-  }
+:root{
+  --paper:#FFFDF7;
+  --ink:#12100E;
+  --red:#B5341A;
+  --red-pale:#FDF0ED;
+  --green:#2D6A4F;
+  --green-pale:#EDF4F0;
+  --amber:#B45309;
+  --amber-pale:#FEF3C7;
+  --blue:#1E3A5F;
+  --blue-pale:#EEF4FF;
+  --grey:#6B6560;
+  --rule:rgba(18,16,14,0.10);
+  --shadow:0 1px 3px rgba(18,16,14,0.08),0 8px 24px rgba(18,16,14,0.06);
+}
 
-  .container {
-    max-width: 1200px;
-    margin: auto;
-  }
+html{scroll-behavior:smooth}
 
-  .header {
-    text-align: center;
-    margin-bottom: 40px;
-  }
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'DM Sans',sans-serif;
+  font-size:15px;
+  line-height:1.6;
+  overflow-x:hidden;
+  min-height:100vh;
+}
 
-  .header h1 {
-    font-size: 42px;
-    margin-bottom: 10px;
-    background: linear-gradient(to right, #38bdf8, #8b5cf6);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
+/* ── NOISE ── */
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  pointer-events:none;z-index:9999;
+  opacity:.025;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='f'%3E%3CfeTurbulence baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23f)'/%3E%3C/svg%3E");
+}
 
-  .header p {
-    color: #94a3b8;
-    font-size: 18px;
-  }
+/* ── MASTHEAD ── */
+.masthead{
+  border-bottom:2px solid var(--ink);
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  align-items:stretch;
+}
 
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 20px;
-  }
+.mast-brand{
+  padding:2rem 2.5rem;
+  border-right:1px solid var(--rule);
+  display:flex;flex-direction:column;justify-content:center;
+}
 
-  .card {
-    background: rgba(15, 23, 42, 0.85);
-    padding: 25px;
-    border-radius: 18px;
-    transition: 0.3s;
-    border: 1px solid rgba(148, 163, 184, 0.15);
-    box-shadow: 0 0 25px rgba(15, 23, 42, 0.4);
-  }
+.mast-brand-eyebrow{
+  font-family:'Fira Code',monospace;
+  font-size:.6rem;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--red);
+  margin-bottom:.4rem;
+}
 
-  .card:hover {
-    transform: translateY(-6px);
-    border-color: #38bdf8;
-    box-shadow: 0 0 25px rgba(56, 189, 248, 0.25);
-  }
+.mast-brand-name{
+  font-family:'Fraunces',serif;
+  font-size:2.6rem;font-weight:900;
+  line-height:.95;letter-spacing:-.02em;
+  color:var(--ink);
+}
 
-  .card h2 {
-    font-size: 18px;
-    margin-bottom: 15px;
-    color: #38bdf8;
-  }
+.mast-brand-name em{
+  font-style:italic;font-weight:300;
+  color:var(--red);
+}
 
-  .metric {
-    font-size: 34px;
-    font-weight: bold;
-    margin-bottom: 10px;
-    color: #ffffff;
-  }
+.mast-center{
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:1.5rem;
+  position:relative;
+}
 
-  .status {
-    margin-top: 10px;
-    color: #22c55e;
-    font-weight: bold;
-  }
+.mast-date-big{
+  font-family:'Fraunces',serif;
+  font-size:5.5rem;font-weight:900;
+  line-height:1;letter-spacing:-.04em;
+  color:var(--ink);
+}
 
-  .health-score {
-    background: linear-gradient(135deg, #1d4ed8, #7c3aed, #0ea5e9);
-    padding: 40px;
-    border-radius: 22px;
-    margin-top: 30px;
-    text-align: center;
-    box-shadow: 0 0 40px rgba(59, 130, 246, 0.3);
-  }
+.mast-date-sub{
+  font-family:'Fira Code',monospace;
+  font-size:.68rem;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--grey);
+  margin-top:.2rem;text-align:center;
+}
 
-  .health-score h2 {
-    font-size: 28px;
-    margin-bottom: 15px;
-    color: #ffffff;
-  }
+.mast-right{
+  padding:2rem 2.5rem;
+  border-left:1px solid var(--rule);
+  display:flex;flex-direction:column;
+  justify-content:space-between;
+  align-items:flex-end;
+  min-width:220px;
+}
 
-  .score {
-    font-size: 80px;
-    font-weight: bold;
-    color: #ffffff;
-  }
+.mast-repo{
+  text-align:right;
+}
 
-  .checks {
-    margin-top: 40px;
-    background: rgba(15, 23, 42, 0.85);
-    border-radius: 20px;
-    padding: 30px;
-    border: 1px solid rgba(148, 163, 184, 0.15);
-    box-shadow: 0 0 25px rgba(15, 23, 42, 0.35);
-  }
+.mast-repo-owner{
+  font-family:'Fira Code',monospace;
+  font-size:.62rem;color:var(--grey);
+  letter-spacing:.08em;text-transform:uppercase;
+}
 
-  .checks h2 {
-    margin-bottom: 20px;
-    color: #38bdf8;
-  }
+.mast-repo-name{
+  font-family:'Fraunces',serif;
+  font-size:1.5rem;font-weight:700;
+  letter-spacing:-.01em;line-height:1.1;
+}
 
-  .check-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 14px 0;
-    border-bottom: 1px solid rgba(148, 163, 184, 0.1);
-    color: #e2e8f0;
-  }
+.pulse-badge{
+  display:inline-flex;align-items:center;gap:.4rem;
+  background:var(--green);color:#fff;
+  font-family:'Fira Code',monospace;
+  font-size:.58rem;letter-spacing:.12em;
+  text-transform:uppercase;
+  padding:.28rem .8rem;border-radius:2px;
+}
 
-  .success {
-    color: #22c55e;
-    font-weight: bold;
-  }
+.pulse-dot{
+  width:5px;height:5px;
+  background:#6EE7B7;border-radius:50%;
+  animation:blink 1.4s infinite;
+}
 
-  .footer {
-    text-align: center;
-    margin-top: 40px;
-    color: #94a3b8;
-  }
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
 
-  .badge {
-    display: inline-block;
-    padding: 8px 14px;
-    border-radius: 50px;
-    background: linear-gradient(to right, #06b6d4, #8b5cf6);
-    color: white;
-    font-size: 14px;
-    margin-top: 10px;
-    box-shadow: 0 0 15px rgba(139, 92, 246, 0.35);
-  }
+/* ── TICKER ── */
+.ticker{
+  background:var(--ink);color:var(--paper);
+  padding:.55rem 0;
+  overflow:hidden;white-space:nowrap;
+  font-family:'Fira Code',monospace;
+  font-size:.66rem;letter-spacing:.06em;
+  text-transform:uppercase;border-bottom:1px solid var(--rule);
+}
+
+.ticker-track{display:inline-block;animation:scroll 35s linear infinite}
+@keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ── PAGE GRID ── */
+.page{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr 1fr;
+  grid-template-rows:auto;
+}
+
+/* ── STAT CARDS ── */
+.stat-strip{
+  grid-column:1/-1;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  border-bottom:1px solid var(--rule);
+}
+
+.stat-card{
+  padding:2.5rem 2rem 2rem;
+  border-right:1px solid var(--rule);
+  position:relative;overflow:hidden;
+  cursor:default;
+  transition:background .25s;
+}
+
+.stat-card:last-child{border-right:none}
+.stat-card:hover{background:rgba(18,16,14,.025)}
+
+.stat-card-bg{
+  position:absolute;
+  bottom:-.5rem;right:.5rem;
+  font-family:'Fraunces',serif;
+  font-size:7rem;font-weight:900;
+  color:rgba(18,16,14,.04);
+  line-height:1;pointer-events:none;
+  user-select:none;
+}
+
+.stat-emoji{font-size:1.6rem;display:block;margin-bottom:.75rem}
+
+.stat-num{
+  font-family:'Fraunces',serif;
+  font-size:4rem;font-weight:900;
+  line-height:1;letter-spacing:-.04em;
+  display:block;
+}
+
+.stat-num.c-red{color:var(--red)}
+.stat-num.c-green{color:var(--green)}
+.stat-num.c-amber{color:var(--amber)}
+.stat-num.c-blue{color:var(--blue)}
+
+.stat-lbl{
+  font-family:'Fira Code',monospace;
+  font-size:.62rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--grey);
+  margin-top:.4rem;display:block;
+}
+
+.stat-tag{
+  display:inline-flex;align-items:center;gap:.25rem;
+  font-family:'Fira Code',monospace;
+  font-size:.58rem;padding:.18rem .5rem;
+  border-radius:2px;margin-top:.6rem;
+}
+
+.tag-neutral{background:rgba(107,101,96,.1);color:var(--grey)}
+.tag-up{background:var(--green-pale);color:var(--green)}
+.tag-down{background:var(--red-pale);color:var(--red)}
+
+/* ── TWO PANE ── */
+.pane-left{
+  grid-column:1/3;
+  border-right:1px solid var(--rule);
+  border-bottom:1px solid var(--rule);
+}
+
+.pane-right{
+  grid-column:3/5;
+  border-bottom:1px solid var(--rule);
+}
+
+.pane-inner{padding:2.5rem 2.5rem}
+
+.eyebrow{
+  font-family:'Fira Code',monospace;
+  font-size:.6rem;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--red);
+  display:flex;align-items:center;gap:.75rem;
+  margin-bottom:1.25rem;
+}
+
+.eyebrow::after{content:'';flex:1;height:1px;background:var(--rule)}
+
+.pane-title{
+  font-family:'Fraunces',serif;
+  font-size:3rem;font-weight:900;
+  letter-spacing:-.03em;line-height:.95;
+  margin-bottom:1.5rem;
+}
+
+/* ── AI BLOCK ── */
+.ai-quote{
+  font-family:'Fraunces',serif;
+  font-size:1.35rem;font-weight:300;
+  font-style:italic;line-height:1.7;
+  border-left:3px solid var(--red);
+  padding-left:1.25rem;
+  margin-bottom:1.75rem;
+  color:var(--ink);
+}
+
+.ai-sig{
+  display:flex;align-items:center;gap:.85rem;
+}
+
+.ai-orb{
+  width:38px;height:38px;
+  background:var(--ink);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1rem;flex-shrink:0;
+}
+
+.ai-sig-name{
+  font-size:.9rem;font-weight:500;display:block;
+}
+
+.ai-sig-meta{
+  font-family:'Fira Code',monospace;
+  font-size:.6rem;color:var(--grey);
+  letter-spacing:.04em;
+}
+
+/* ── INFO CHIPS ── */
+.chips{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:.75rem;margin-top:2rem;
+}
+
+.chip{
+  background:var(--paper);
+  border:1px solid var(--rule);
+  border-radius:4px;
+  padding:.85rem 1rem;
+  transition:border-color .2s,box-shadow .2s;
+}
+
+.chip:hover{
+  border-color:var(--ink);
+  box-shadow:var(--shadow);
+}
+
+.chip-lbl{
+  font-family:'Fira Code',monospace;
+  font-size:.58rem;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--grey);
+  margin-bottom:.2rem;
+}
+
+.chip-val{
+  font-size:.95rem;font-weight:500;
+}
+
+.chip-val.ok{color:var(--green)}
+.chip-val.warn{color:var(--amber)}
+
+/* ── ISSUE LIST ── */
+.issue-list{list-style:none}
+
+.issue-row{
+  display:flex;align-items:flex-start;gap:.85rem;
+  padding:1rem 0;
+  border-bottom:1px solid var(--rule);
+  transition:padding-left .18s,background .18s;
+  cursor:default;
+}
+
+.issue-row:last-child{border-bottom:none}
+.issue-row:hover{padding-left:.5rem}
+
+.issue-id{
+  font-family:'Fira Code',monospace;
+  font-size:.65rem;color:var(--red);
+  flex-shrink:0;padding-top:.15rem;
+  min-width:2.5rem;font-weight:500;
+}
+
+.issue-body{}
+.issue-title-text{font-size:.95rem;font-weight:400;line-height:1.35;display:block}
+.issue-byline{font-family:'Fira Code',monospace;font-size:.6rem;color:var(--grey);margin-top:.18rem;letter-spacing:.03em}
+
+.pill{
+  display:inline-block;
+  font-family:'Fira Code',monospace;
+  font-size:.55rem;letter-spacing:.06em;text-transform:uppercase;
+  padding:.12rem .45rem;border-radius:2px;margin-right:.25rem;
+  font-weight:500;
+}
+
+.pill-bug{background:var(--red-pale);color:var(--red)}
+.pill-feat{background:var(--green-pale);color:var(--green)}
+.pill-docs{background:var(--amber-pale);color:var(--amber)}
+.pill-q{background:var(--blue-pale);color:var(--blue)}
+
+/* ── CHART ── */
+.chart-pane{
+  grid-column:1/-1;
+  padding:2.5rem;
+  border-bottom:1px solid var(--rule);
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:3rem;align-items:start;
+}
+
+.chart-meta{}
+.chart-meta .pane-title{font-size:2.2rem;margin-bottom:.5rem}
+.chart-desc{font-size:.88rem;color:var(--grey);max-width:200px;line-height:1.6}
+
+.chart-wrap{padding-top:1.5rem}
+.bar-chart{display:flex;align-items:flex-end;gap:6px;height:140px}
+
+.bar-grp{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px}
+
+.bar{
+  width:100%;border-radius:3px 3px 0 0;
+  position:relative;min-height:3px;
+  animation:rise .9s cubic-bezier(.22,1,.36,1) both;
+  transform-origin:bottom;cursor:pointer;
+}
+
+@keyframes rise{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+
+.bar-commits{background:var(--ink)}
+.bar-issues{background:var(--red);opacity:.7}
+.bar-today{background:var(--red);opacity:1}
+
+.bar:hover::after{
+  content:attr(data-tip);
+  position:absolute;bottom:calc(100% + 6px);left:50%;
+  transform:translateX(-50%);
+  background:var(--ink);color:#fff;
+  font-family:'Fira Code',monospace;font-size:.58rem;
+  padding:.2rem .45rem;border-radius:2px;white-space:nowrap;
+  pointer-events:none;
+}
+
+.bar-day{
+  font-family:'Fira Code',monospace;
+  font-size:.58rem;color:var(--grey);
+  letter-spacing:.04em;
+}
+
+.chart-legend{
+  display:flex;gap:1.5rem;margin-bottom:1rem;
+}
+
+.legend-item{
+  display:flex;align-items:center;gap:.4rem;
+  font-family:'Fira Code',monospace;font-size:.62rem;
+  color:var(--grey);
+}
+
+.legend-swatch{width:10px;height:10px;border-radius:2px}
+.sw-ink{background:var(--ink)}
+.sw-red{background:var(--red)}
+
+/* ── HEALTH + PIPELINE ── */
+.health-pane{
+  grid-column:1/3;
+  border-right:1px solid var(--rule);
+  border-bottom:1px solid var(--rule);
+  padding:2.5rem;
+}
+
+.pipeline-pane{
+  grid-column:3/5;
+  border-bottom:1px solid var(--rule);
+  padding:2.5rem;
+}
+
+/* score ring */
+.score-layout{display:flex;gap:2.5rem;align-items:center;margin-top:1.5rem}
+
+.ring-wrap{position:relative;width:130px;height:130px;flex-shrink:0}
+.ring-wrap svg{transform:rotate(-90deg);width:130px;height:130px}
+.ring-wrap circle{fill:none;stroke-width:9}
+.ring-track{stroke:rgba(18,16,14,.08)}
+.ring-fill{
+  stroke:var(--green);
+  stroke-dasharray:365;
+  stroke-dashoffset:55;
+  stroke-linecap:round;
+  animation:ringIn 1.6s cubic-bezier(.22,1,.36,1) both .4s;
+}
+@keyframes ringIn{from{stroke-dashoffset:365}to{stroke-dashoffset:55}}
+
+.ring-label{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+}
+
+.ring-score{
+  font-family:'Fraunces',serif;
+  font-size:2.6rem;font-weight:900;
+  line-height:1;letter-spacing:-.04em;
+}
+
+.ring-of{
+  font-family:'Fira Code',monospace;
+  font-size:.58rem;color:var(--grey);
+  letter-spacing:.08em;text-transform:uppercase;
+}
+
+.health-rows{}
+
+.h-row{
+  display:flex;justify-content:space-between;
+  align-items:center;padding:.55rem 0;
+  border-bottom:1px solid var(--rule);
+  font-size:.88rem;
+}
+
+.h-row:last-child{border-bottom:none}
+.h-row-lbl{color:var(--grey)}
+.h-row-val{font-family:'Fira Code',monospace;font-size:.72rem;font-weight:500}
+.h-ok{color:var(--green)}
+.h-warn{color:var(--amber)}
+.h-bad{color:var(--red)}
+
+/* pipeline */
+.pipe-list{list-style:none;margin-top:1rem}
+
+.pipe-row{
+  display:flex;align-items:center;gap:.85rem;
+  padding:.85rem 1rem;
+  border:1px solid var(--rule);
+  border-radius:4px;
+  margin-bottom:.6rem;
+  background:rgba(18,16,14,.015);
+  transition:border-color .2s,transform .15s;
+}
+
+.pipe-row:hover{border-color:var(--ink);transform:translateX(2px)}
+
+.pipe-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.d-ok{background:var(--green);box-shadow:0 0 0 3px var(--green-pale)}
+.d-warn{background:var(--amber);box-shadow:0 0 0 3px var(--amber-pale)}
+
+.pipe-name{
+  flex:1;font-family:'Fira Code',monospace;
+  font-size:.72rem;font-weight:400;
+}
+
+.pipe-time{
+  font-family:'Fira Code',monospace;
+  font-size:.62rem;color:var(--grey);
+}
+
+.next-run{
+  margin-top:1.25rem;
+  padding:1rem 1.25rem;
+  background:var(--green-pale);
+  border:1px solid rgba(45,106,79,.2);
+  border-radius:4px;
+}
+
+.next-run-lbl{
+  font-family:'Fira Code',monospace;
+  font-size:.58rem;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--green);
+}
+
+.next-run-time{font-size:1.05rem;font-weight:500;margin-top:.15rem}
+.next-run-cron{font-family:'Fira Code',monospace;font-size:.62rem;color:var(--grey);margin-top:.1rem}
+
+/* ── DARK KESTRA BAND ── */
+.kestra-band{
+  grid-column:1/-1;
+  background:var(--ink);color:var(--paper);
+  padding:3rem 2.5rem;
+  border-bottom:1px solid var(--rule);
+}
+
+.kestra-band .eyebrow{color:#E87E5C}
+.kestra-band .eyebrow::after{background:rgba(255,253,247,.12)}
+.kestra-band .pane-title{color:var(--paper);font-size:2.8rem}
+
+.flow-rail{
+  display:grid;grid-template-columns:repeat(5,1fr);
+  margin-top:2.5rem;position:relative;
+}
+
+.flow-rail::before{
+  content:'';position:absolute;
+  top:27px;left:13%;right:13%;
+  height:1px;background:rgba(181,52,26,.5);
+}
+
+.flow-node{text-align:center;padding:0 .5rem;position:relative}
+
+.flow-orb{
+  width:54px;height:54px;border-radius:50%;
+  background:rgba(255,253,247,.07);
+  border:1px solid rgba(255,253,247,.14);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto .85rem;font-size:1.15rem;
+  position:relative;z-index:1;
+  transition:background .25s,border-color .25s;
+}
+
+.flow-node:hover .flow-orb{
+  background:var(--red);border-color:var(--red);
+}
+
+.flow-lbl{
+  font-family:'Fira Code',monospace;
+  font-size:.6rem;letter-spacing:.08em;
+  text-transform:uppercase;
+  color:rgba(255,253,247,.5);
+  line-height:1.6;
+}
+
+.kestra-footer-bar{
+  margin-top:2.5rem;
+  padding-top:1.5rem;
+  border-top:1px solid rgba(255,253,247,.08);
+  display:flex;justify-content:space-between;align-items:center;
+}
+
+.kestra-footer-bar span{
+  font-family:'Fira Code',monospace;
+  font-size:.62rem;
+  color:rgba(255,253,247,.3);
+  letter-spacing:.05em;
+}
+
+/* ── TESTIMONIAL / CERT BAND ── */
+.cert-band{
+  grid-column:1/-1;
+  display:grid;grid-template-columns:1fr 1fr;
+  border-bottom:1px solid var(--rule);
+}
+
+.cert-left{
+  padding:2.5rem;
+  border-right:1px solid var(--rule);
+  display:flex;flex-direction:column;justify-content:center;
+}
+
+.cert-badge{
+  display:inline-flex;align-items:center;gap:.75rem;
+  background:var(--amber-pale);
+  border:1px solid rgba(180,83,9,.2);
+  border-radius:6px;padding:1.25rem 1.5rem;
+  margin-bottom:1.5rem;
+  width:fit-content;
+}
+
+.cert-badge-icon{font-size:2rem}
+
+.cert-badge-text{}
+.cert-badge-title{font-size:1rem;font-weight:500;display:block}
+.cert-badge-sub{font-family:'Fira Code',monospace;font-size:.62rem;color:var(--grey);letter-spacing:.04em}
+
+.cert-desc{font-size:.95rem;color:var(--grey);line-height:1.7;max-width:400px}
+
+.cert-right{
+  padding:2.5rem;
+  display:flex;flex-direction:column;justify-content:center;
+}
+
+.quest-title{
+  font-family:'Fraunces',serif;
+  font-size:2rem;font-weight:900;
+  letter-spacing:-.02em;line-height:1.1;
+  margin-bottom:1rem;
+}
+
+.quest-steps{list-style:none}
+
+.quest-step{
+  display:flex;align-items:flex-start;gap:.85rem;
+  padding:.75rem 0;border-bottom:1px solid var(--rule);
+  font-size:.9rem;
+}
+
+.quest-step:last-child{border-bottom:none}
+
+.quest-step-num{
+  font-family:'Fira Code',monospace;
+  font-size:.65rem;font-weight:500;
+  color:var(--red);min-width:1.5rem;
+  padding-top:.1rem;
+}
+
+.quest-step-done{
+  font-family:'Fira Code',monospace;
+  font-size:.65rem;color:var(--green);
+  margin-left:auto;padding-top:.1rem;flex-shrink:0;
+}
+
+/* ── FOOTER ── */
+footer{
+  grid-column:1/-1;
+  padding:1.75rem 2.5rem;
+  display:grid;grid-template-columns:1fr auto 1fr;
+  align-items:center;
+  border-top:2px solid var(--ink);
+  background:var(--paper);
+}
+
+.foot-left{font-family:'Fira Code',monospace;font-size:.62rem;color:var(--grey);line-height:1.8}
+.foot-center{font-family:'Fraunces',serif;font-size:1.5rem;font-weight:900;letter-spacing:-.02em}
+.foot-right{text-align:right;font-family:'Fira Code',monospace;font-size:.62rem;color:var(--grey);line-height:1.8}
+.foot-right a{color:var(--red);text-decoration:none}
+.foot-right a:hover{text-decoration:underline}
+
+/* ── ANIMATIONS ── */
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .65s ease,transform .65s ease}
+.reveal.in{opacity:1;transform:none}
+
+/* ── RESPONSIVE ── */
+@media(max-width:960px){
+  .masthead{grid-template-columns:1fr;text-align:center}
+  .mast-brand,.mast-right{border:none;padding:1.5rem}
+  .mast-right{align-items:center}
+  .stat-strip,.flow-rail{grid-template-columns:repeat(2,1fr)}
+  .pane-left,.pane-right,.health-pane,.pipeline-pane{grid-column:1/-1}
+  .pane-left,.health-pane{border-right:none;border-bottom:1px solid var(--rule)}
+  .chart-pane{grid-template-columns:1fr}
+  .cert-band{grid-template-columns:1fr}
+  .cert-left{border-right:none;border-bottom:1px solid var(--rule)}
+  footer{grid-template-columns:1fr;text-align:center;gap:.5rem}
+  .foot-right{text-align:center}
+}
 </style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<header class="masthead">
+  <div class="mast-brand">
+    <div class="mast-brand-eyebrow">// daily automated report</div>
+    <div class="mast-brand-name">Repo<br><em>Health</em></div>
+  </div>
+
+  <div class="mast-center">
+    <div class="mast-date-big" id="jsDay">09</div>
+    <div class="mast-date-sub" id="jsDateSub">Friday, May 09 · 2026</div>
+  </div>
+
+  <div class="mast-right">
+    <div class="mast-repo">
+      <div class="mast-repo-owner">pooja-bhavani /</div>
+      <div class="mast-repo-name">daily-repo-<br>health-report</div>
+    </div>
+    <span class="pulse-badge"><span class="pulse-dot"></span>Live · Kestra</span>
+  </div>
+</header>
+
+<!-- TICKER -->
+<div class="ticker">
+  <span class="ticker-track">
+    &nbsp;⬡ Kestra Workflow Orchestration &nbsp;·&nbsp; 🤖 Groq LLaMA 3.1-8b-instant &nbsp;·&nbsp; 📊 GitHub REST API v3 &nbsp;·&nbsp; ✅ Kestra Certified — Pooja Bhavani — OXJS1R5X &nbsp;·&nbsp; 🏆 WeMakeDevs Orchestration Quest 2026 &nbsp;·&nbsp; ⏰ Runs daily 09:00 AM — cron 0 9 * * * &nbsp;·&nbsp; 🌐 github.com/pooja-bhavani/daily-repo-health-report &nbsp;·&nbsp; ⬡ Kestra Workflow Orchestration &nbsp;·&nbsp; 🤖 Groq LLaMA 3.1-8b-instant &nbsp;·&nbsp; 📊 GitHub REST API v3 &nbsp;·&nbsp; ✅ Kestra Certified — Pooja Bhavani — OXJS1R5X &nbsp;·&nbsp; 🏆 WeMakeDevs Orchestration Quest 2026 &nbsp;·&nbsp; ⏰ Runs daily 09:00 AM — cron 0 9 * * * &nbsp;·&nbsp; 🌐 github.com/pooja-bhavani/daily-repo-health-report &nbsp;·&nbsp;
+  </span>
+</div>
+
+<div class="page">
+
+  <!-- STAT STRIP -->
+  <div class="stat-strip reveal">
+    <div class="stat-card">
+      <span class="stat-emoji">⭐</span>
+      <span class="stat-num c-red" id="jsStars">0</span>
+      <span class="stat-lbl">GitHub Stars</span>
+      <span class="stat-tag tag-neutral">— just launched</span>
+      <div class="stat-card-bg">0</div>
+    </div>
+    <div class="stat-card">
+      <span class="stat-emoji">🍴</span>
+      <span class="stat-num c-green" id="jsForks">0</span>
+      <span class="stat-lbl">Repository Forks</span>
+      <span class="stat-tag tag-neutral">— growing soon</span>
+      <div class="stat-card-bg">0</div>
+    </div>
+    <div class="stat-card">
+      <span class="stat-emoji">🐛</span>
+      <span class="stat-num c-amber" id="jsIssues">0</span>
+      <span class="stat-lbl">Open Issues</span>
+      <span class="stat-tag tag-up">↑ Tracking active</span>
+      <div class="stat-card-bg">0</div>
+    </div>
+    <div class="stat-card">
+      <span class="stat-emoji">👀</span>
+      <span class="stat-num c-blue" id="jsWatch">1</span>
+      <span class="stat-lbl">Watchers</span>
+      <span class="stat-tag tag-up">↑ Live</span>
+      <div class="stat-card-bg">1</div>
+    </div>
+  </div>
+
+  <!-- AI SUMMARY + ISSUES -->
+  <div class="pane-left reveal">
+    <div class="pane-inner">
+      <div class="eyebrow">AI Daily Analysis</div>
+      <h2 class="pane-title">Today's<br>Intelligence</h2>
+
+      <div class="ai-quote">
+        This repository has just been initialized — a blank canvas ready to be shaped into something meaningful. The foundation is set, the automation is live, and Kestra is watching. Every great open-source project starts exactly like this: zero stars, infinite potential. The journey has officially begun.
+      </div>
+
+      <div class="ai-sig">
+        <div class="ai-orb">🤖</div>
+        <div>
+          <span class="ai-sig-name">Kestra AI Reporter</span>
+          <span class="ai-sig-meta">groq · llama-3.1-8b-instant · generated 09:00 AM daily</span>
+        </div>
+      </div>
+
+      <div class="chips">
+        <div class="chip">
+          <div class="chip-lbl">Owner</div>
+          <div class="chip-val">pooja-bhavani</div>
+        </div>
+        <div class="chip">
+          <div class="chip-lbl">Visibility</div>
+          <div class="chip-val ok">● Public</div>
+        </div>
+        <div class="chip">
+          <div class="chip-lbl">Certification</div>
+          <div class="chip-val">OXJS1R5X</div>
+        </div>
+        <div class="chip">
+          <div class="chip-lbl">Automation</div>
+          <div class="chip-val ok">● Kestra Live</div>
+        </div>
+        <div class="chip">
+          <div class="chip-lbl">GitHub Pages</div>
+          <div class="chip-val ok">● Deployed</div>
+        </div>
+        <div class="chip">
+          <div class="chip-lbl">Created</div>
+          <div class="chip-val">May 2026</div>
+        </div>
+        <div class="chip">
+          <div class="chip-lbl">AI Model</div>
+          <div class="chip-val" style="font-size:.8rem">llama-3.1-8b</div>
+        </div>
+        <div class="chip">
+          <div class="chip-lbl">Schedule</div>
+          <div class="chip-val" style="font-size:.8rem">0 9 * * *</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ISSUE TRACKER -->
+  <div class="pane-right reveal">
+    <div class="pane-inner">
+      <div class="eyebrow">Issue Tracker</div>
+      <h2 class="pane-title">Open<br>Issues</h2>
+
+      <ul class="issue-list">
+        <li class="issue-row">
+          <span class="issue-id">#—</span>
+          <div class="issue-body">
+            <span class="issue-title-text" style="color:var(--grey);font-style:italic">No open issues yet — repo is fresh!</span>
+            <span class="issue-byline">Issues will appear here automatically once the repo is active and contributors arrive.</span>
+          </div>
+        </li>
+      </ul>
+
+      <div style="margin-top:2rem;padding-top:2rem;border-top:1px solid var(--rule)">
+        <div class="eyebrow">Pull Requests</div>
+        <ul class="issue-list">
+          <li class="issue-row">
+            <span class="issue-id" style="color:var(--green)">PR—</span>
+            <div class="issue-body">
+              <span class="issue-title-text" style="color:var(--grey);font-style:italic">No open pull requests yet</span>
+              <span class="issue-byline">PRs will be tracked and displayed here as contributors submit them.</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-top:2rem;padding-top:2rem;border-top:1px solid var(--rule)">
+        <div class="eyebrow">About This Repo</div>
+        <p style="font-size:.92rem;color:var(--grey);line-height:1.75">
+          A Kestra-powered automation that fetches daily GitHub repo statistics, generates an AI summary using Groq LLaMA 3.1, and deploys this live health dashboard to GitHub Pages — all on a schedule, completely hands-free.
+        </p>
+        <div style="margin-top:1rem;display:flex;gap:.5rem;flex-wrap:wrap">
+          <span class="pill pill-feat">Kestra</span>
+          <span class="pill pill-docs">Groq AI</span>
+          <span class="pill pill-q">GitHub API</span>
+          <span class="pill pill-bug">DevOps</span>
+          <span class="pill pill-feat">Automation</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHART -->
+  <div class="chart-pane reveal">
+    <div class="chart-meta">
+      <div class="eyebrow">Activity</div>
+      <div class="pane-title">Weekly<br>Pulse</div>
+      <p class="chart-desc">Commit & event activity over the last 7 days. Repo initialized today.</p>
+      <div class="chart-legend" style="margin-top:1.5rem">
+        <div class="legend-item"><div class="legend-swatch sw-ink"></div>Commits</div>
+        <div class="legend-item"><div class="legend-swatch sw-red"></div>Events</div>
+      </div>
+    </div>
+
+    <div class="chart-wrap">
+      <div class="bar-chart">
+        <div class="bar-grp"><div class="bar bar-commits" style="height:4px;animation-delay:.0s" data-tip="0 commits"></div><div class="bar-day">Mon</div></div>
+        <div class="bar-grp"><div class="bar bar-commits" style="height:4px;animation-delay:.1s" data-tip="0 commits"></div><div class="bar-day">Tue</div></div>
+        <div class="bar-grp"><div class="bar bar-commits" style="height:4px;animation-delay:.2s" data-tip="0 commits"></div><div class="bar-day">Wed</div></div>
+        <div class="bar-grp"><div class="bar bar-commits" style="height:4px;animation-delay:.3s" data-tip="0 commits"></div><div class="bar-day">Thu</div></div>
+        <div class="bar-grp"><div class="bar bar-commits" style="height:4px;animation-delay:.4s" data-tip="0 commits"></div><div class="bar-day">Fri</div></div>
+        <div class="bar-grp"><div class="bar bar-commits" style="height:4px;animation-delay:.5s" data-tip="0 commits"></div><div class="bar-day">Sat</div></div>
+        <div class="bar-grp"><div class="bar bar-today" style="height:110px;animation-delay:.6s" data-tip="🚀 Repo created!"></div><div class="bar-day" style="color:var(--red);font-weight:500">Today</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEALTH SCORE -->
+  <div class="health-pane reveal">
+    <div class="eyebrow">Health Score</div>
+    <h2 class="pane-title" style="font-size:2.2rem">Overall<br>Status</h2>
+
+    <div class="score-layout">
+      <div class="ring-wrap">
+        <svg viewBox="0 0 130 130">
+          <circle class="ring-track" cx="65" cy="65" r="58"/>
+          <circle class="ring-fill" cx="65" cy="65" r="58"/>
+        </svg>
+        <div class="ring-label">
+          <span class="ring-score">85</span>
+          <span class="ring-of">/ 100</span>
+        </div>
+      </div>
+
+      <div class="health-rows">
+        <div class="h-row"><span class="h-row-lbl">Repository created</span><span class="h-row-val h-ok">✓ Yes</span></div>
+        <div class="h-row"><span class="h-row-lbl">Public visibility</span><span class="h-row-val h-ok">✓ Yes</span></div>
+        <div class="h-row"><span class="h-row-lbl">Kestra automation</span><span class="h-row-val h-ok">✓ Live</span></div>
+        <div class="h-row"><span class="h-row-lbl">GitHub Pages</span><span class="h-row-val h-ok">✓ Active</span></div>
+        <div class="h-row"><span class="h-row-lbl">README file</span><span class="h-row-val h-warn">⚠ Missing</span></div>
+        <div class="h-row"><span class="h-row-lbl">LICENSE file</span><span class="h-row-val h-warn">⚠ Missing</span></div>
+        <div class="h-row"><span class="h-row-lbl">AI summary</span><span class="h-row-val h-ok">✓ Running</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PIPELINE -->
+  <div class="pipeline-pane reveal">
+    <div class="eyebrow">Kestra Pipeline</div>
+    <h2 class="pane-title" style="font-size:2.2rem">Task<br>Status</h2>
+
+    <ul class="pipe-list">
+      <li class="pipe-row"><span class="pipe-dot d-ok"></span><span class="pipe-name">fetch_repo_stats</span><span class="pipe-time">0.43s · ✓</span></li>
+      <li class="pipe-row"><span class="pipe-dot d-ok"></span><span class="pipe-name">fetch_open_issues</span><span class="pipe-time">0.38s · ✓</span></li>
+      <li class="pipe-row"><span class="pipe-dot d-ok"></span><span class="pipe-name">fetch_open_prs</span><span class="pipe-time">0.41s · ✓</span></li>
+      <li class="pipe-row"><span class="pipe-dot d-ok"></span><span class="pipe-name">generate_ai_summary</span><span class="pipe-time">0.87s · ✓</span></li>
+      <li class="pipe-row"><span class="pipe-dot d-ok"></span><span class="pipe-name">deploy_landing_page</span><span class="pipe-time">1.20s · ✓</span></li>
+      <li class="pipe-row"><span class="pipe-dot d-ok"></span><span class="pipe-name">log_summary</span><span class="pipe-time">0.02s · ✓</span></li>
+    </ul>
+
+    <div class="next-run">
+      <div class="next-run-lbl">Next scheduled run</div>
+      <div class="next-run-time">Tomorrow · 09:00 AM</div>
+      <div class="next-run-cron">cron: 0 9 * * * · namespace: company.team</div>
+    </div>
+  </div>
+
+  <!-- KESTRA BAND -->
+  <div class="kestra-band reveal">
+    <div class="eyebrow">Architecture</div>
+    <h2 class="pane-title">Powered by Kestra<br>Workflow Orchestration</h2>
+
+    <div class="flow-rail">
+      <div class="flow-node"><div class="flow-orb">⏰</div><div class="flow-lbl">Schedule<br>9AM Daily<br>cron trigger</div></div>
+      <div class="flow-node"><div class="flow-orb">📡</div><div class="flow-lbl">GitHub API<br>Fetch stats<br>issues · PRs</div></div>
+      <div class="flow-node"><div class="flow-orb">🧠</div><div class="flow-lbl">Groq AI<br>LLaMA 3.1<br>Summary</div></div>
+      <div class="flow-node"><div class="flow-orb">📝</div><div class="flow-lbl">GitHub<br>Post comment<br>on issue</div></div>
+      <div class="flow-node"><div class="flow-orb">🌐</div><div class="flow-lbl">Deploy<br>GitHub Pages<br>this dashboard</div></div>
+    </div>
+
+    <div class="kestra-footer-bar">
+      <span>id: daily-repo-health-report · namespace: company.team · trigger: cron 0 9 * * *</span>
+      <span>Pooja Bhavani · Certificate OXJS1R5X · WeMakeDevs Orchestration Quest 2026</span>
+    </div>
+  </div>
+
+  <!-- CERT BAND -->
+  <div class="cert-band reveal">
+    <div class="cert-left">
+      <div class="cert-badge">
+        <div class="cert-badge-icon">🏅</div>
+        <div class="cert-badge-text">
+          <span class="cert-badge-title">Kestra Fundamentals — Certified</span>
+          <span class="cert-badge-sub">Pooja Bhavani · May 07, 2026 · ID: OXJS1R5X</span>
+        </div>
+      </div>
+      <p class="cert-desc">
+        This automation was built as part of the WeMakeDevs Orchestration Quest — a hands-on challenge to learn Kestra by building real workflows. Everything you see on this page is generated, orchestrated, and deployed automatically by Kestra — no manual steps, no code servers, just YAML.
+      </p>
+    </div>
+
+    <div class="cert-right">
+      <h3 class="quest-title">WeMakeDevs<br>Orchestration Quest</h3>
+      <ul class="quest-steps">
+        <li class="quest-step"><span class="quest-step-num">01</span><span>Register for the Orchestration Quest</span><span class="quest-step-done">✓ done</span></li>
+        <li class="quest-step"><span class="quest-step-num">02</span><span>Complete Kestra Fundamentals course</span><span class="quest-step-done">✓ done</span></li>
+        <li class="quest-step"><span class="quest-step-num">03</span><span>Earn official Kestra certification</span><span class="quest-step-done">✓ done</span></li>
+        <li class="quest-step"><span class="quest-step-num">04</span><span>Build real workflows with Kestra</span><span class="quest-step-done">✓ done</span></li>
+        <li class="quest-step"><span class="quest-step-num">05</span><span>Post on socials with #KestraAcademy</span><span class="quest-step-done">→ next</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="foot-left">
+      Auto-generated by Kestra · <span id="jsTime"></span><br>
+      Scheduled daily at 09:00 AM · cron: 0 9 * * *
+    </div>
+    <div class="foot-center">⬡ KESTRA</div>
+    <div class="foot-right">
+      <a href="https://github.com/pooja-bhavani/daily-repo-health-report">github.com/pooja-bhavani/daily-repo-health-report</a><br>
+      <a href="https://wemakedevs.org/orchestration">WeMakeDevs Orchestration Quest 2026</a>
+    </div>
+  </footer>
+
+</div><!-- .page -->
+
+<script>
+  // Date
+  const d = new Date();
+  document.getElementById('jsDay').textContent = String(d.getDate()).padStart(2,'0');
+  document.getElementById('jsDateSub').textContent = d.toLocaleDateString('en-GB',{weekday:'long'}) + ', ' + d.toLocaleDateString('en-GB',{month:'long',day:'numeric'}) + ' · ' + d.getFullYear();
+  document.getElementById('jsTime').textContent = 'Last run: ' + d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+
+  // Scroll reveal
+  const io = new IntersectionObserver(entries => {
+    entries.forEach((e,i) => {
+      if(e.isIntersecting) setTimeout(()=>e.target.classList.add('in'), i*80);
+    });
+  },{threshold:0.08});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  // Count up
+  function countUp(el, target, ms=1400){
+    const start = performance.now();
+    const step = now => {
+      const p = Math.min((now-start)/ms,1);
+      const ease = 1-Math.pow(1-p,4);
+      el.textContent = Math.round(ease*target);
+      if(p<1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+
+  setTimeout(()=>{
+    countUp(document.getElementById('jsStars'),0);
+    countUp(document.getElementById('jsForks'),0);
+    countUp(document.getElementById('jsIssues'),0);
+    countUp(document.getElementById('jsWatch'),1);
+  },500);
+</script>
+</body>
+</html>
