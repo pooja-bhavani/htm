@@ -1,236 +1,65 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Repository Health Dashboard</title>
+/* 🔥 MODERN GLASSMORPHISM + CYBERPUNK THEME */
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-    }
+body {
+  background: linear-gradient(135deg, #020617, #0f172a, #111827);
+  color: #f8fafc;
+  padding: 40px;
+}
 
-    body {
-      background: #0f172a;
-      color: #ffffff;
-      padding: 40px;
-    }
+.card {
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.08);
+}
 
-    .container {
-      max-width: 1200px;
-      margin: auto;
-    }
+.card:hover {
+  transform: translateY(-6px) scale(1.02);
+  border-color: #06b6d4;
+  box-shadow: 0 0 30px rgba(6, 182, 212, 0.3);
+}
 
-    .header {
-      text-align: center;
-      margin-bottom: 40px;
-    }
+.header h1 {
+  background: linear-gradient(to right, #38bdf8, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 
-    .header h1 {
-      font-size: 42px;
-      margin-bottom: 10px;
-    }
+.header p {
+  color: #94a3b8;
+}
 
-    .header p {
-      color: #94a3b8;
-      font-size: 18px;
-    }
+.health-score {
+  background: linear-gradient(135deg, #0f172a, #1e1b4b, #312e81);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  box-shadow: 0 0 40px rgba(139, 92, 246, 0.25);
+}
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 20px;
-    }
+.score {
+  background: linear-gradient(to right, #22d3ee, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 
-    .card {
-      background: #1e293b;
-      padding: 25px;
-      border-radius: 16px;
-      transition: 0.3s;
-      border: 1px solid #334155;
-    }
+.checks {
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(56, 189, 248, 0.15);
+}
 
-    .card:hover {
-      transform: translateY(-5px);
-      border-color: #3b82f6;
-    }
+.check-item {
+  border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+}
 
-    .card h2 {
-      font-size: 18px;
-      margin-bottom: 15px;
-      color: #38bdf8;
-    }
+.success {
+  color: #22c55e;
+}
 
-    .metric {
-      font-size: 34px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
+.badge {
+  background: linear-gradient(to right, #06b6d4, #8b5cf6);
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.5);
+}
 
-    .status {
-      margin-top: 10px;
-      color: #22c55e;
-      font-weight: bold;
-    }
-
-    .health-score {
-      background: linear-gradient(135deg, #2563eb, #7c3aed);
-      padding: 40px;
-      border-radius: 20px;
-      margin-top: 30px;
-      text-align: center;
-    }
-
-    .health-score h2 {
-      font-size: 28px;
-      margin-bottom: 15px;
-    }
-
-    .score {
-      font-size: 80px;
-      font-weight: bold;
-    }
-
-    .checks {
-      margin-top: 40px;
-      background: #1e293b;
-      border-radius: 20px;
-      padding: 30px;
-    }
-
-    .checks h2 {
-      margin-bottom: 20px;
-      color: #38bdf8;
-    }
-
-    .check-item {
-      display: flex;
-      justify-content: space-between;
-      padding: 14px 0;
-      border-bottom: 1px solid #334155;
-    }
-
-    .success {
-      color: #22c55e;
-      font-weight: bold;
-    }
-
-    .footer {
-      text-align: center;
-      margin-top: 40px;
-      color: #94a3b8;
-    }
-
-    .badge {
-      display: inline-block;
-      padding: 8px 14px;
-      border-radius: 50px;
-      background: #22c55e;
-      color: white;
-      font-size: 14px;
-      margin-top: 10px;
-    }
-  </style>
-</head>
-
-<body>
-
-  <div class="container">
-
-    <div class="header">
-      <h1>🚀 Repository Health Dashboard</h1>
-      <p>Intelligent DevOps Repository Analyzer using Kestra</p>
-      <div class="badge">DevOps Ready</div>
-    </div>
-
-    <div class="grid">
-
-      <div class="card">
-        <h2>⭐ GitHub Stars</h2>
-        <div class="metric">128</div>
-        <p>Repository popularity score</p>
-      </div>
-
-      <div class="card">
-        <h2>🍴 Forks</h2>
-        <div class="metric">42</div>
-        <p>Community contributions</p>
-      </div>
-
-      <div class="card">
-        <h2>🐛 Open Issues</h2>
-        <div class="metric">3</div>
-        <p>Pending repository issues</p>
-      </div>
-
-      <div class="card">
-        <h2>🔐 Security</h2>
-        <div class="metric">A+</div>
-        <p>Trivy vulnerability scan</p>
-        <div class="status">Secure</div>
-      </div>
-
-    </div>
-
-    <div class="health-score">
-      <h2>📊 Repository Health Score</h2>
-      <div class="score">92/100</div>
-      <p>Excellent DevOps Maturity</p>
-    </div>
-
-    <div class="checks">
-      <h2>🔥 DevOps Best Practice Checks</h2>
-
-      <div class="check-item">
-        <span>README Documentation</span>
-        <span class="success">✅ PASS</span>
-      </div>
-
-      <div class="check-item">
-        <span>Docker Support</span>
-        <span class="success">✅ PASS</span>
-      </div>
-
-      <div class="check-item">
-        <span>GitHub Actions CI/CD</span>
-        <span class="success">✅ PASS</span>
-      </div>
-
-      <div class="check-item">
-        <span>Kubernetes Manifests</span>
-        <span class="success">✅ PASS</span>
-      </div>
-
-      <div class="check-item">
-        <span>Terraform Infrastructure</span>
-        <span class="success">✅ PASS</span>
-      </div>
-
-      <div class="check-item">
-        <span>Monitoring Stack</span>
-        <span class="success">✅ PASS</span>
-      </div>
-
-      <div class="check-item">
-        <span>Security Scanning</span>
-        <span class="success">✅ PASS</span>
-      </div>
-
-      <div class="check-item">
-        <span>License Validation</span>
-        <span class="success">✅ PASS</span>
-      </div>
-
-    </div>
-
-    <div class="footer">
-      <p>Built with Kestra • Docker • GitHub API • Trivy</p>
-    </div>
-
-  </div>
-
-</body>
-</html>
+.footer {
+  color: #64748b;
+}
